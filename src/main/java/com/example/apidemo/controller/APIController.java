@@ -44,4 +44,27 @@ public class APIController {
         articleDao.save(article);
         return ResponseEntity.ok().build();
     }
+
+    //curl -v -X PATCH localhost:8080/api/articles/1 -H 'Content-Type: application/json' -d '{"title":"Updated article","body":"Updated article content"}'
+    @PatchMapping(value = "/{id}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateArticle(@PathVariable int id,@RequestBody Article article){
+        if(articleDao.existsById(id)){
+            article.setId(id);
+            articleDao.save(article);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //curl -v -X DELETE localhost:8080/api/articles/1
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteArticleById(@PathVariable int id){
+        if(articleDao.existsById(id)){
+            articleDao.deleteById(id);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
